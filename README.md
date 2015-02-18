@@ -1,4 +1,4 @@
 # Operating_Systems
 Repo for OS work
 
-> Added trace system call
+> xv6: Added trace system call
