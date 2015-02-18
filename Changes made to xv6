@@ -1,0 +1,37 @@
+Changes made to xv6
+*********************************
+> added try.c in root folder for testing (NOT CURRENTLY WORKING)
+
+> added try.c to EXTRA=/ section of Makefile (line 243)
+> added "_try\" to UPROGS=/ section of Makefile (line 173)
+
+> added trace prototype to user.h (line 26)
+> added trace system call number to syscall.h (line 23)
+
+> added "extern int sys_trace(void);" to syscall.c (line 97)
+> added "[SYS_trace]   sys_trace" to syscall.c (line 125) in last place of syscalls array to match with trace system call number in syscall.h
+
+> added "SYSCALL(trace)" to usys.S (line 32)
+
+> added sys_trace() function to sysproc.c (starting @ line 97)
+	- just sets tracing var in proc and returns scc (system call count)
+
+> added "int tracing;" to proc struct in proc.h (line 69)
+
+> modified syscall(void) in syscall.c (starting line 143) to check for tracing and output based on that
+	- this is system call entrance function: check at every call if tracing enabled
+
+> added "int scc;" (system call count) to proc.h (line 70) for per process system call counting
+
+
+Notes/ TODO
+*****************************
+> Still need to make sure tracing var in proc is cleared when a new process is created
+	- does the allocation (i believe its a calloc) clear this, or does it still need to be cleared when new proc is created
+
+> Find way to output name of system call being made (not just number)
+	- may be able to use argstr to do this from in syscall.c
+
+> Testing
+
+> Formatting
