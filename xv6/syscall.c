@@ -144,14 +144,4 @@ syscall(void)
             proc->pid, proc->name, num);
     proc->tf->eax = -1;
   }
-
-  // // track tracing
-  // int tracing;
-
-  // tracing = proc->tracing;
-  // // tracing = 1;
-  // if(tracing != 0) {
-  //   cprintf("  pid: %d [%s] syscall(%d) syscalls by proc: %d\n",
-  //          proc->pid, proc->name, num, proc->scc);
-  // }
 }

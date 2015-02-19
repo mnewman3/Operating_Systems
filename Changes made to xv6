@@ -17,11 +17,11 @@ Changes made to xv6
 	- just sets tracing var in proc and returns scc (system call count)
 
 > added "int tracing;" to proc struct in proc.h (line 69)
+> added "int scc;" (system call count) to proc.h (line 70) for per process system call counting
 
-> modified syscall(void) in syscall.c (starting line 143) to check for tracing and output based on that
+> modified syscall(void) in syscall.c (starting line 143) to add to scc and check for tracing then output based on that
 	- this is system call entrance function: check at every call if tracing enabled
 
-> added "int scc;" (system call count) to proc.h (line 70) for per process system call counting
 
 
 Notes/ TODO

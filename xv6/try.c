@@ -34,5 +34,8 @@ main(int argc, char *argv[])
 		printf(stdout, "waiting...\n");
 		wait();
 	}
+	printf(stdout, "system calls from proc: %d\n", trace(0));
+	printf(stdout, "disabled tracing\n");
+	printf(stdout, "should be disabled ....\n");
 	return 0;
 }
