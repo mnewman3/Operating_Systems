@@ -26,8 +26,13 @@ Changes made to xv6
 
 Notes/ TODO
 *****************************
-> Still need to make sure tracing var in proc is cleared when a new process is created
+
+*** important ***
+> Still need to make sure tracing and scc vars in proc are cleared when a new process is created
+	- currently seems to work but he says "Find where the entry is initialized to clear the values" which I have not actually done as of yet
 	- does the allocation (i believe its a calloc) clear this, or does it still need to be cleared when new proc is created
+
+
 
 > Find way to output name of system call being made (not just number)
 	- may be able to use argstr to do this from in syscall.c
