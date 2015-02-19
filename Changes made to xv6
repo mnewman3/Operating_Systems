@@ -22,15 +22,16 @@ Changes made to xv6
 > modified syscall(void) in syscall.c (starting line 143) to add to scc and check for tracing then output based on that
 	- this is system call entrance function: check at every call if tracing enabled
 
+> modified allocproc() funtion in proc.c (lines 73 - 75) to clear out tracing and scc vars in proc struct upon allocation of new proc (per-process info) for new process
 
 
 Notes/ TODO
 *****************************
 
 *** important ***
-> Still need to make sure tracing and scc vars in proc are cleared when a new process is created
-	- currently seems to work but he says "Find where the entry is initialized to clear the values" which I have not actually done as of yet
-	- does the allocation (i believe its a calloc) clear this, or does it still need to be cleared when new proc is created
+> Still need to make sure tracing and scc vars in proc are cleared properly when a new process is created
+	- currently sets these to 0 upon allocation in allocproc() in proc.c
+	- not sure if this is sufficient, may want to memset() to 0 instead of just setting equal to 0 ... needs to be investigated
 
 
 

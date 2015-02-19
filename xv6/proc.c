@@ -70,6 +70,10 @@ found:
   memset(p->context, 0, sizeof *p->context);
   p->context->eip = (uint)forkret;
 
+  // Clearing vars for trace **note, may need to memset this**
+  p->tracing = 0;
+  p->scc = 0;
+
   return p;
 }
 

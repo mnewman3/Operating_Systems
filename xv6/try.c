@@ -27,15 +27,17 @@ main(int argc, char *argv[])
 	int pid;
 	pid = fork();
 	if(pid == 0){
-		printf(stdout, "in child\n");
+		printf(stdout, "--IN CHILD--\n");
+		printf(stdout, "this should not have tracing enabled\n");
+		exit();
 	} else {
-		printf(stdout, "in parent...killing child\n");
-		kill(pid);
-		printf(stdout, "waiting...\n");
+		printf(stdout, "IN PARENT...killing child\n");
+		printf(stdout, "waiting for child to die...\n");
 		wait();
 	}
-	printf(stdout, "system calls from proc: %d\n", trace(0));
-	printf(stdout, "disabled tracing\n");
-	printf(stdout, "should be disabled ....\n");
+	printf(stdout, "disabling tracing...\n-- system calls from proc: %d --\n", trace(0));
+	printf(stdout, "tracing disabled\n");
+	printf(stdout, "-- system calls from proc: %d --\n", trace(0));
+	printf(stdout, "-- system calls from proc: %d --\n", trace(0));
 	return 0;
 }
