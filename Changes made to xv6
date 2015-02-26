@@ -1,6 +1,6 @@
 Changes made to xv6
 *********************************
-> added try.c in root folder for testing (NOT CURRENTLY WORKING)
+> added try.c in root folder for testing
 
 > added try.c to EXTRA=/ section of Makefile (line 243)
 > added "_try\" to UPROGS=/ section of Makefile (line 173)
@@ -32,6 +32,7 @@ Notes/ TODO
 > Still need to make sure tracing and scc vars in proc are cleared properly when a new process is created
 	- currently sets these to 0 upon allocation in allocproc() in proc.c
 	- not sure if this is sufficient, may want to memset() to 0 instead of just setting equal to 0 ... needs to be investigated
+	- may be able to grab system call name from where syscalls come in
 
 
 
