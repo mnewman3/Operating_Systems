@@ -48,13 +48,43 @@ void initializeHT(){
 
 }
 
-void my_changeDir(){
+int my_changeDir(commandPtr command){
+
+    /* invalid number of arguments */
+    if(command->argcount > 2){
+        printf("error: too many arguments\n");
+        return 0;
+    }
+
+    /* goto home directory */
+    if(command->argcount == 1){
+        if(chdir(getenv("HOME")) == 0) {
+            return 1;
+        } else {
+            printf("error: unable to return to home directory\n");
+            return 0;
+        }
+    }
+
+    /* successful change of dir */
+    if(chdir(command->args[1]) == 0){
+        return 1;
+    } 
+
+    /* unable to change directory */
+    return 0;
 
 }
 
-void my_exit(){
+int my_exit(commandPtr command){
 
+    if(command->args[1] == NULL){
+        exit(0);
+    }
+
+    exit(atoi(command->args[1]));
 }
+
 int main(void){
     initializeHT();
 
