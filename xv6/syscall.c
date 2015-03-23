@@ -153,7 +153,6 @@ static char* syscall_names[] = {
 void
 syscall(void)
 {
-  // cprintf("sys call made ... tracing = %d\n", proc->tracing);
   int num;
 
   num = proc->tf->eax;
