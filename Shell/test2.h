@@ -13,7 +13,8 @@ struct command {
 
 };
 
-struct builtins_HT {
+typedef struct builtins * builtinsPtr;
+struct builtins {
     // struct builtins key;
     char * key;
     void (*functionPtr)();
@@ -21,3 +22,7 @@ struct builtins_HT {
 };
 
 void runpipe(commandPtr);
+
+void my_changeDir();
+
+void my_exit();

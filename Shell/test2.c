@@ -1,10 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <errno.h>
-#include <string.h>
-#include <unistd.h>
 #include "test2.h"
-#include "uthash.h"
+
 
 void runpipe(commandPtr comm){
     int pid;
@@ -32,24 +27,25 @@ void runpipe(commandPtr comm){
     }
 }
 
-struct builtin_HT * ht = NULL;
+builtinsPtr ht = NULL;
 
 /* initilizes built in commands cd and exit */
 void initializeHT(){
 
-    struct builtin_HT * builtin_cd = (struct builtin_HT *)malloc(sizeof(struct builtin_HT));
+    builtinsPtr builtin_cd = (builtinsPtr)malloc(sizeof(struct builtins));
     builtin_cd->key = (char *)malloc(sizeof("cd"));
     builtin_cd->key = "cd";
-    builtin_cd->functionPtr = my_changeDir;
+    builtin_cd->functionPtr = &my_changeDir;
 
     HASH_ADD_STR(ht, key, builtin_cd);
 
-/*    struct builtins * builtin_exit = (struct builtins *)malloc(sizeof(struct builtins));
-    builtin_cd->name = "exit";
-    builtin_cd->functionPtr = my_exit;
+    builtinsPtr builtin_exit = (builtinsPtr)malloc(sizeof(struct builtins));
+    builtin_exit->key = (char *)malloc(sizeof("exit"));
+    builtin_exit->key = "exit";
+    builtin_exit->functionPtr = &my_exit;
 
-    HASH_ADD(hh, builtin_HT, key, sizeof(builtins), builtin_exit);
-*/
+    HASH_ADD_STR(ht, key, builtin_exit);
+
 }
 
 void my_changeDir(){
