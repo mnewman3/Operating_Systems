@@ -6,39 +6,17 @@
 #define KCYN  "\x1B[36m"
 #define NUM_ARG 50
 #define MAX_LEN 50
-
-// int run_command(char** params)
-// {
-//     pid_t pid = fork();
-//     if (pid == -1) {
-//         char* error = strerror(errno);
-//         printf("fork: %s\n", error);
-//         return 1;
-//     }else if (pid == 0) {
-//         // Execute command
-//         execvp(params[0], params);  
-
-//         // Error occurred
-//         char* error = strerror(errno);
-//         printf("shell: %s: %s\n", params[0], error);
-//         return 0;
-//     }
-
-//     // Parent process
-//     else {
-//         // Wait for child process to finish
-//         int childStatus;
-//         waitpid(pid, &childStatus, 0);
-//         return 1;
-//     }
-// }
+#define NUM_SEPERATORS 10
 
 int main(int argc, char **argv) { 
     printf("\n");
     while (1) {
         printf("%s$%s ", KCYN, KNRM);
 
-        char str[MAX_LEN];
+        char* str = (char*) malloc(sizeof(char) * MAX_LEN);
+        char* seperators = (char*) malloc(sizeof(char) * NUM_SEPERATORS);
+        seperators[0] = ' ';
+
         int i;
         fgets(str, MAX_LEN, stdin);
 
@@ -46,20 +24,16 @@ int main(int argc, char **argv) {
             continue;
         }
 
-        /* remove newline, if present */
-        // i = strlen(str)-1;
-        // if( str[ i ] == '\n') {
-        //   str[i] = '\0';
-        // }
-
-        printf("This is your string: %s\n", str);
-
         TokenizerT *tk;
-        tk = TKCreate(" ", str);
+        tk = TKCreate(seperators, str);
          
         char *token;
         while( (token = TKGetNextToken(tk)) != NULL ){
             // printString(token);   // Print token with bracketed hex
+            if(strlen(token) == 0) {
+                continue;
+            }
+            printf("%s\n", token);
             free(token);         // TKGetNextToken() mallocs so we must free here
         }
 
