@@ -1,5 +1,5 @@
 /*
- * Michael Newman && Mark Conley
+ * Michael Newman, Mark Conley, Pavan Purohit
  * tokenizer.c
  */
 #include <stdio.h>

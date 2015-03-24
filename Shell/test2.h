@@ -1,3 +1,4 @@
+// Michael Newman, Mark Conley, Pavan Purohit
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
@@ -9,6 +10,7 @@ typedef struct command * commandPtr;
 struct command {
     int fd[2];
     char * args[50];
+    int argcount;
     struct command * next;
 
 };
@@ -23,6 +25,6 @@ struct builtins {
 
 void runpipe(commandPtr);
 
-void my_changeDir();
+int my_changeDir(commandPtr);
 
-void my_exit();
+int my_exit(commandPtr);
