@@ -19,7 +19,7 @@ typedef struct builtins * builtinsPtr;
 struct builtins {
     // struct builtins key;
     char * key;
-    void (*functionPtr)();
+    int (*functionPtr)();
     UT_hash_handle hh; /* makes structure a hash table */
 };
 
