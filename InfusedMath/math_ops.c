@@ -23,11 +23,13 @@ void fib(char * f){
 	double lim = atof(f);
 
 	//check to see if lim is an integer
-	if(ceilf(lim) == lim){
+	if(roundf(lim) == lim){
+		
+	} else {
 		printf("lim is: %f.\t", lim); //testing
 		printf("Argument must be an integer.\n");
+		return;	
 	}
-
 }
 
 void add(char *a, char *b){
@@ -95,4 +97,11 @@ int is_prime(int num){
 		}
 	}
 	return 1;
+}
+
+int main(void){
+
+	fib("5.777");
+
+	return 0;
 }
