@@ -1,5 +1,7 @@
+// Michael Newman, Mark Conley, Pavan Purohit
 #include "test2.h"
 
+builtinsPtr ht = NULL;
 
 void runpipe(commandPtr comm){
     int pid;
@@ -10,12 +12,12 @@ void runpipe(commandPtr comm){
             case 0: /* child process */
                 dup2(comm->fd[0], 0);
                 close(comm->fd[1]);
-                execvp(comm->args[0], comm->args);
+                execvp(comm->next->args[0], comm->next->args);
                 exit(0);
             default: /* parent */
                 dup2(comm->fd[1], 1);
                 close(comm->fd[0]);
-                execvp(comm->next->args[0], comm->next->args);
+                execvp(comm->args[0], comm->args);
                 exit(0);
             case -1:
                 perror("fork");
@@ -27,7 +29,39 @@ void runpipe(commandPtr comm){
     }
 }
 
-builtinsPtr ht = NULL;
+int runfork(commandPtr comm) {
+    int pid = fork();
+    switch(pid) {
+        case 0: /* child process */
+            printf("in child\n");
+            runpipe(comm);
+        default: /* parent */
+            printf("in parent\n");
+        case -1:
+            perror("fork");
+            exit(1);
+    }
+    return pid;
+}
+
+void runcommand(commandPtr comm) {
+    if(comm == NULL)  return;
+
+    builtinsPtr search;
+    // builtin
+    if(HASH_FIND_STR(ht, (comm->args[0]), search) != NULL) {
+        if (comm->next != NULL) {
+            printf("error, builtin functions take one parameter\n");
+            return;
+        } else {
+            (search->functionPtr)(comm);
+        }
+    } else { // not builtin
+        runfork(comm);
+    }
+
+}
+
 
 /* initilizes built in commands cd and exit */
 void initializeHT(){
