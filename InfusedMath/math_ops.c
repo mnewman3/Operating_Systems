@@ -3,8 +3,8 @@
 #include <stdio.h>
 
 /* math operations */
-void factor(char *a, char *b);
-void fib(char *f);
+void factor(char *, char *);
+void fib(char *f, char * k);
 void add(char *a, char *b);
 void subtract(char *a, char *b);
 void multiply(char *a, char *b);
@@ -14,11 +14,11 @@ void exponent(char *a, char *b);
 /* helpers */
 int isPrime(int n);
 
-void factor(char *a, char *b){
+void factor(char *f, char * k){
 
 }
 
-void fib(char * f){
+void fib(char * f, char * k){
 
 	double lim = atof(f);
 
@@ -97,11 +97,4 @@ int is_prime(int num){
 		}
 	}
 	return 1;
-}
-
-int main(void){
-
-	fib("5.777");
-
-	return 0;
 }
