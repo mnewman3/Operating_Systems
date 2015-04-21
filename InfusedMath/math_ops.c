@@ -21,15 +21,12 @@ void factor(char *a, char *b){
 void fib(char * f){
 
 	double lim = atof(f);
-		printf("lim is: %f.\n", lim);
 
 	//check to see if lim is an integer
 	if(ceilf(lim) == lim){
-		printf("lim is: %f.\t", lim);
+		printf("lim is: %f.\t", lim); //testing
 		printf("Argument must be an integer.\n");
 	}
-
-
 
 }
 
