@@ -7,6 +7,7 @@
 #include <errno.h>
 #include <time.h>
 #include <fuse/fuse.h>
+#include "math_ops.c"
 
 #define OP_TABLE_SIZE 7
 #define NUM_ARGS 3
@@ -29,8 +30,14 @@ const operation op_table[] = {
     {"exp", exponent, "Raise a number to an exponent.\nThe file exp/a/b contains a raised to the power of b.", 2}
 };
 
-operation * is_valid_op(char * path){
-    
+operation * is_valid_op(char * token){
+    int i;
+    for(i = 0; i <= OP_TABLE_SIZE; i++){
+        if(strcmp(token, op_table[i]->name) == 0) {
+            return op_table[i];
+        }
+    }
+    return NULL;
 }
 
 // FUSE function implementations.
@@ -43,29 +50,32 @@ static int mathfs_getattr(const char *path, struct stat *stbuf)
 
     memset(stbuf, 0, sizeof(struct stat));
 
-    //checks to see if just 
+    //checks to see if just
     if(strcmp(path, "/") == 0){
         stbuf->st_mode = S_IFDIR | 0755;
         stbuf->st_nlink = 2;
         return 0;
     }
-
-    token = strtok(path, "/");
+    
+    char * p = path;
+    token = strtok(p, "/");
     
     // check if valid cmd from struct
-    operation * op = NULL;
-    for(int i = 0; i <= OP_TABLE_SIZE; i++){
-        if(strcmp(token, op_table[i].name) == 0) {
-            op = op_table[i];
-            break;
-        }
-    }
+    operation * op = is_valid_op(token);
+
+    // for(int i = 0; i <= OP_TABLE_SIZE; i++){
+    //     if(strcmp(token, op_table[i].name) == 0) {
+    //         op = op_table[i];
+    //         break;
+    //     }
+    // }
 
     if(op == NULL) {
         // dis bad -> error
     }
 
-    for(int i = 0; i < op->num_args; i++) {
+    int i;
+    for(i = 0; i < op->num_args; i++) {
         
         token = strtok(NULL, "/");
 

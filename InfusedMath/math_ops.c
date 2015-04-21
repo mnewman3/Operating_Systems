@@ -90,8 +90,9 @@ int is_prime(int num){
 		return 1;
 
 	int lim = sqrt(num)+1;
-
-	for(int i = 2; i <= lim; i++){
+	
+	int i;
+	for(i = 2; i <= lim; i++){
 		if(num % i == 0){
 			return 0;
 		}
@@ -99,9 +100,9 @@ int is_prime(int num){
 	return 1;
 }
 
-int main(void){
+// int main(void){
 
-	fib("5.777");
+// 	fib("5.777");
 
-	return 0;
-}
+// 	return 0;
+// }
