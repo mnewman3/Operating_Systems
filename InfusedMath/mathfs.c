@@ -7,6 +7,7 @@
 #include <errno.h>
 #include <time.h>
 #include <fuse/fuse.h>
+
 #include "math_ops.c"
 
 #define OP_TABLE_SIZE 7
@@ -14,14 +15,14 @@
 
 struct operation {
     char * name;
-    char * (*op)();
+    void (*op)();
     char * op_description;
     int num_args;
 };
 typedef struct operation operation;
 
-const operation op_table[] = {
-    {"factor", factor, "Computes the prime factors of a number.\nThe file factor/n contains the prime factors of n.", 1},
+operation op_table[] = {
+    {"factor", &factor, "Computes the prime factors of a number.\nThe file factor/n contains the prime factors of n.", 1},
     {"fib", fib, "Produce a fibonacci sequence.\nThe file fib/n contains the first n fibonacci numbers.", 2},
     {"add", add, "Adds two numbers.\nThe file add/a/b contains the sum of a plus b.", 2},
     {"sub", subtract, "Subtracts two numbers.\nThe file sub/a/b contains the difference a minus b.", 2},
@@ -56,8 +57,8 @@ static int mathfs_getattr(const char *path, struct stat *stbuf)
         stbuf->st_nlink = 2;
         return 0;
     }
-    
-    char * p = path;
+
+    char * p = (char*)path;
     token = strtok(p, "/");
     
     // check if valid cmd from struct
@@ -103,17 +104,20 @@ static int mathfs_readdir(const char *path, void *buf, fuse_fill_dir_t filler, o
 {
     (void) offset;
     (void) fi;
+    return 0;
 
 }       
 
 static int mathfs_open(const char *path, struct fuse_file_info *fi)
 {
+    return 0;
 
 }
 
 static int mathfs_read(const char *path, char *buf, size_t size, off_t offset, struct fuse_file_info *fi)
 {
     (void) fi;
+    return 0;
 
 }
 

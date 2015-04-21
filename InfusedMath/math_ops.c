@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 /* math operations */
-void factor(char *a, char *b);
+void factor(char *a);
 void fib(char *f);
 void add(char *a, char *b);
 void subtract(char *a, char *b);
@@ -14,7 +14,7 @@ void exponent(char *a, char *b);
 /* helpers */
 int isPrime(int n);
 
-void factor(char *a, char *b){
+void factor(char *f){
 
 }
 
@@ -90,19 +90,11 @@ int is_prime(int num){
 		return 1;
 
 	int lim = sqrt(num)+1;
-	
-	int i;
-	for(i = 2; i <= lim; i++){
+
+	for(int i = 2; i <= lim; i++){
 		if(num % i == 0){
 			return 0;
 		}
 	}
 	return 1;
 }
-
-// int main(void){
-
-// 	fib("5.777");
-
-// 	return 0;
-// }
