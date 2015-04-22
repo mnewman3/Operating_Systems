@@ -69,8 +69,9 @@ char * fib(char * f){
 		
 	} else {
 		printf("lim is: %f.\t", lim); //testing
-		// printf("Argument must be an integer.\n");
-		return "Argument must be an integer.\n";	
+		printf("Argument must be an integer.\n");
+		return NULL;
+		// return "Argument must be an integer.\n";	
 	}
 
 	//print 0 and 1 to start sequence
@@ -134,8 +135,9 @@ char * divide(char *a, char *b){
 	char * f = (char *)malloc(MAX_SIZE); 
 
 	if(b == 0){
-		// printf("Cannot divide by 0.\n");
-		return "Cannot divide by 0.\n";
+		printf("Cannot divide by 0.\n");
+		return NULL;
+		// return "Cannot divide by 0.\n";
 	}
 
 	sprintf(f, "%.2f\n", (x / y));

@@ -26,7 +26,7 @@
 
 struct operation {
     char * name;
-    void (*op)();
+    char* (*op)();
     char * op_description;
     int num_args;
 };
