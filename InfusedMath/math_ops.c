@@ -2,27 +2,31 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#define MAX_SIZE 1024
+
 /* math operations */
-void factor(char *);
-void fib(char *);
-void add(char *a, char *b);
-void subtract(char *a, char *b);
-void multiply(char *a, char *b);
-void divide(char *a, char *b);
-void exponent(char *a, char *b);
+char * factor(char *);
+char * fib(char *);
+char * add(char *, char *);
+char * subtract(char *, char *);
+char * multiply(char *, char *);
+char * divide(char *, char *);
+char * exponent(char *, char *);
 
 /* helpers */
 int isPrime(int n);
 
-void factor(char *f){
+char * factor(char *f){
 
 	int n = atoi(f);
+	char * str = (char *)malloc(MAX_SIZE); 
 
 	//CHECK IF n IS AN INTEGER
 
 	// Print the number of 2s that divide n
 	while (n%2 == 0){
-		printf("%d\n", 2);
+		sprintf(str, "%d\n", 2);
+		//printf("%d\n", 2);
 		n = n/2;
 	}
  
@@ -31,7 +35,8 @@ void factor(char *f){
 	for (i = 3; i <= sqrt(n); i = i+2){
 		// While i divides n, print i and divide n
 		while (n%i == 0){
-			printf("%d\n", i);
+			sprintf(str, "%d\n", i);
+			// printf("%d\n", i);
 			n = n/i;
 		}
 	}
@@ -39,21 +44,27 @@ void factor(char *f){
 	// This condition is to handle the case whien n is a prime number
 	// greater than 2
 	if (n > 2)
-		printf ("%d\n", n);
+		sprintf(str, "%d\n", n);
+		// printf ("%d\n", n);
+
+	return str;
 }
 
-void fib(char * f){
+//TODO fix this 
+//prints 0 1 2 3... should print 0 1 1 2 3 5
+char * fib(char * f){
 
 	double lim = atof(f);
 
 	int x = 0;
 	int y = 1;
 	int z = 0; 
-
 	int count = 0;
+	char * str = (char *)malloc(MAX_SIZE); 
 
 	while(count < lim){
-		printf("%d + %d = %d\n",x,y, z);
+		sprintf(str,"%d\n",z);
+		//printf("%d + %d = %d\n",x,y, z);
 
 		z = x + y;
 
@@ -73,61 +84,73 @@ void fib(char * f){
 		
 	} else {
 		printf("lim is: %f.\t", lim); //testing
-		printf("Argument must be an integer.\n");
-		return;	
+		// printf("Argument must be an integer.\n");
+		return "Argument must be an integer.\n";	
 	}
 
-
-
-}
-
-void add(char *a, char *b){
-
-	double x = atof(a);
-	double y = atof(b);
-
-	printf("%.2f\n", (x + y));
+	return str;
 
 }
 
-void subtract(char *a, char *b){
+char * add(char *a, char *b){
 
 	double x = atof(a);
 	double y = atof(b);
+	char * f = (char *)malloc(MAX_SIZE); 
 
-	printf("%.2f\n", (x - y));
+	sprintf(f, "%.2f\n", (x+y));
+	// printf("%.2f\n", (x + y));
+	return f;
 }
 
-void multiply(char *a, char *b){
+char * subtract(char *a, char *b){
 
 	double x = atof(a);
 	double y = atof(b);
+	char * f = (char *)malloc(MAX_SIZE); 
 
-	printf("%.2f\n", (x * y));
-
+	sprintf(f, "%.2f\n", (x - y));
+	// printf("%.2f\n", (x - y));
+	return f;
 }
 
-void divide(char *a, char *b){
+char * multiply(char *a, char *b){
 
 	double x = atof(a);
 	double y = atof(b);
+	char * f = (char *)malloc(MAX_SIZE); 
+
+	sprintf(f, "%.2f\n", (x * y));
+	// printf("%.2f\n", (x * y));
+	return f;
+}
+
+char * divide(char *a, char *b){
+
+	double x = atof(a);
+	double y = atof(b);
+	char * f = (char *)malloc(MAX_SIZE); 
 
 	if(b == 0){
-		printf("Cannot divide by 0.\n");
-		return;
+		// printf("Cannot divide by 0.\n");
+		return "Cannot divide by 0.\n";
 	}
 
-	printf("%.2f\n", (x / y));
-
+	sprintf(f, "%.2f\n", (x / y));
+	// printf("%.2f\n", (x / y));
+	return f;
 }
 
-void exponent(char *a, char *b){
+char * exponent(char *a, char *b){
 
 	double x = atof(a);
 	double y = atof(b);
+	char * str = (char *)malloc(MAX_SIZE); 
 
-	printf("%.2f\n", pow(x,y));
+	sprintf(str, "%f\n", pow(x,y));
+	// printf("%.2f\n", pow(x,y));
 
+	return str;
 }
 
 /* returns 1 if argument is prime and 0 otherwise */
@@ -149,6 +172,7 @@ int is_prime(int num){
 	return 1;
 }
 
-// int main(void){
-// 	factor("223092870");
-// }
+int main(void){
+	// factor("223092870");
+	return 0;
+}
