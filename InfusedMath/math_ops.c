@@ -59,23 +59,8 @@ char * fib(char * f){
 	int x = 0;
 	int y = 1;
 	int z = 0; 
-	int count = 0;
+	int count = 3; //by the time count is incremented the first 3 nums of seq will be printed
 	char * str = (char *)malloc(MAX_SIZE); 
-
-	while(count < lim){
-		sprintf(str,"%d\n",z);
-		//printf("%d + %d = %d\n",x,y, z);
-
-		z = x + y;
-
-		if( count % 2 == 0 ){
-			x = z;
-		} else {
-			y = z;
-		}
-
-		count++;
-	}
 
 	//check to see if lim is an integer
 	if(roundf(lim) == lim){
@@ -86,6 +71,29 @@ char * fib(char * f){
 		printf("lim is: %f.\t", lim); //testing
 		// printf("Argument must be an integer.\n");
 		return "Argument must be an integer.\n";	
+	}
+
+	//print 0 and 1 to start sequence
+	printf("%d\n", x);
+	printf("%d\n", y);
+
+	while(count <= lim){
+		
+		z = x + y;
+
+		sprintf(str,"%d\n",z);
+		// printf("%d\n", z);
+
+		if(count % 2 == 0){
+			// x = z;
+			y = z;
+		} else {
+			// y = z;
+			x = z;
+
+		}
+
+		count++;
 	}
 
 	return str;
@@ -172,7 +180,8 @@ int is_prime(int num){
 	return 1;
 }
 
-int main(void){
-	// factor("223092870");
-	return 0;
-}
+// int main(void){
+// 	// factor("223092870");
+// 	fib("10");
+// 	return 0;
+// }
