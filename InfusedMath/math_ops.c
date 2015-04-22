@@ -89,7 +89,6 @@ char * fib(char * f){
 		} else {
 			x = z;
 		}
-
 		count++;
 	}
 	return str;
