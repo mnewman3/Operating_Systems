@@ -85,19 +85,14 @@ char * fib(char * f){
 		// printf("%d\n", z);
 
 		if(count % 2 == 0){
-			// x = z;
 			y = z;
 		} else {
-			// y = z;
 			x = z;
-
 		}
 
 		count++;
 	}
-
 	return str;
-
 }
 
 char * add(char *a, char *b){
