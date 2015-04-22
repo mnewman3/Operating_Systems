@@ -27,7 +27,8 @@ void factor(char *f){
 	}
  
 	// n must be odd at this point.  So we can skip one element (Note i = i +2)
-	for (int i = 3; i <= sqrt(n); i = i+2){
+	int i;
+	for (i = 3; i <= sqrt(n); i = i+2){
 		// While i divides n, print i and divide n
 		while (n%i == 0){
 			printf("%d\n", i);
@@ -139,7 +140,8 @@ int is_prime(int num){
 
 	int lim = sqrt(num)+1;
 
-	for(int i = 2; i <= lim; i++){
+	int i;
+	for(i = 2; i <= lim; i++){
 		if(num % i == 0){
 			return 0;
 		}
@@ -147,6 +149,6 @@ int is_prime(int num){
 	return 1;
 }
 
-int main(void){
-	factor("223092870");
-}
+// int main(void){
+// 	factor("223092870");
+// }

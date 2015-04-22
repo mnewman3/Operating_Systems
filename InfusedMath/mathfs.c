@@ -6,6 +6,7 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <time.h>
+#include <ctype.h>
 #include <fuse/fuse.h>
 
 #include "math_ops.c"
@@ -33,7 +34,7 @@ typedef struct operation operation;
 
 operation op_table[] = {
     {"factor", factor, "Computes the prime factors of a number.\nThe file factor/n contains the prime factors of n.", 1},
-    {"fib", fib, "Produce a fibonacci sequence.\nThe file fib/n contains the first n fibonacci numbers.", 2},
+    {"fib", fib, "Produce a fibonacci sequence.\nThe file fib/n contains the first n fibonacci numbers.", 1},
     {"add", add, "Adds two numbers.\nThe file add/a/b contains the sum of a plus b.", 2},
     {"sub", subtract, "Subtracts two numbers.\nThe file sub/a/b contains the difference a minus b.", 2},
     {"mul", multiply, "Multiplies two numbers.\nThe file mul/a/b contains the product of a times b.", 2},
@@ -41,27 +42,37 @@ operation op_table[] = {
     {"exp", exponent, "Raise a number to an exponent.\nThe file exp/a/b contains a raised to the power of b.", 2}
 };
 
-operation * is_valid_op(char * token){
+operation * get_op(char * token){
+    if (token == NULL)  return NULL;
     int i;
-    for(i = 0; i <= OP_TABLE_SIZE; i++){
-        if(strcmp(token, op_table[i].name) == 0) {
+    for (i = 0; i <= OP_TABLE_SIZE; i++){
+        if (strcmp(token, op_table[i].name) == 0) {
             return &op_table[i];
         }
     }
     return NULL;
 }
 
+int isNumeric (const char * s)
+{
+    if (s == NULL || *s == '\0' || isspace(*s))  return 0;
+    char * p;
+    strtod (s, &p);
+    return *p == '\0';
+}
+
 // FUSE function implementations.
 static int mathfs_getattr(const char *path, struct stat *stbuf)
 {
     printf("%s-- In getattr, path: %s --%s\n", KMAG, path, KNRM);
-    int ret = 0;
-    char * token;
-    char * commands[NUM_ARGS-1];   // args -1 b/c dont store command in here
+
+    // int ret = 0;
+    // char * token;
+    char * commands[NUM_ARGS+1];   // args +1 b/c space to check for extra command (invalid)
 
     memset(stbuf, 0, sizeof(struct stat));
 
-    //checks to see if just
+    //checks to see if just root
     if(strcmp(path, "/") == 0){
         printf("%s-- Good shit, you're at the root --%s\n", KMAG, KNRM);
         stbuf->st_mode = S_IFDIR | 0755;
@@ -71,62 +82,81 @@ static int mathfs_getattr(const char *path, struct stat *stbuf)
         printf("%s-- getattr: not root dir --%s\n", KMAG, KNRM);
     }
 
-    token = strtok((char*)path, "/");
-
-    // check if valid cmd from struct
-    operation * op = is_valid_op(token);
-
-    // invalid operation = no entry error
-    if(op == NULL) {
-        printf("%s-- Error: invalid operation dumbass --%s\n", KMAG, KNRM);
-        return -ENOENT;
-    } else {
-        printf("%s-- getattr: valid operation --%s\n", KMAG, KNRM);
-    }
-
-    // fill array with arguments
+    // fills commands array
+    commands[0] = strtok((char*)path, "/");
     int i;
-    for(i = 0; i < (op->num_args); i++) {
-        token = strtok(NULL, "/");
-        commands[i] = token;
-        printf("%s-- arg%d : %s --%s\n", KMAG, i, token, KNRM);
+    for (i=1; i < NUM_ARGS+1; i++) {
+        commands[i] = strtok(NULL, "/");
     }
 
-    // check if path is operation folder
-    if(commands[0] == NULL) {
-        printf("%s-- Good shit, you're in the operation folder: %s --%s\n", KMAG, path, KNRM);
+/* begin checking commands array from back to front */
+
+    // too many args
+    if (commands[3] != NULL) {
+        return -ENOENT;
+    }
+    
+    // 2nd arg - file or nothing
+    else if (commands[2] != NULL) {
+        if (strcmp(commands[1], "doc") == 0) {
+            printf("%sdoc then more error on path: %s%s\n", KMAG, path, KNRM);
+            return -ENOENT;
+        }
+        else if (isNumeric(commands[2]) != 0) {
+            printf("%s-- valid 2nd number: %s --%s\n", KMAG, commands[2], KNRM);
+            stbuf->st_mode = S_IFREG | 0444;
+            stbuf->st_nlink = 1;
+            stbuf->st_size = strlen(commands[2])+1;
+            return 0;
+        }
+        else {
+            return -ENOENT;
+        }
+    }
+    
+    // 1st arg - doc or (number as file or folder)
+    else if (commands[1] != NULL) {
+        
+        operation * op = get_op(commands[0]);
+        if (isNumeric(commands[1]) != 0) {
+            
+            if (op == NULL)  return -ENOENT;
+            
+            if (op->num_args == 1) {
+                printf("%s-- valid 1st number as file: %s --%s\n", KMAG, commands[1], KNRM);
+                stbuf->st_mode = S_IFREG | 0444;
+                stbuf->st_nlink = 1;
+                stbuf->st_size = strlen(commands[1])+1;
+            }
+            else {
+                printf("%s-- valid 1st number as folder: %s --%s\n", KMAG, commands[1], KNRM);
+                stbuf->st_mode = S_IFDIR | 0755;
+                stbuf->st_nlink = 1;
+            }
+            return 0;
+
+        }
+        else if (strcmp(commands[1], "doc") == 0) {
+            printf("%s-- valid doc --%s\n", KMAG, KNRM);
+            stbuf->st_mode = S_IFREG | 0444;
+            stbuf->st_nlink = 1;
+            stbuf->st_size = strlen(op->op_description)+1;
+            return 0;
+        }
+        else {
+            return -ENOENT;
+        }
+    }
+
+    // operation
+    else if (get_op(commands[0]) != NULL) {
+        printf("%s-- valid operation: %s --%s\n", KMAG, commands[0], KNRM);
         stbuf->st_mode = S_IFDIR | 0755;
         stbuf->st_nlink = 3;
         return 0;
     }
 
-    printf("%s-- getattr: finished filling args array --%s\n", KMAG, KNRM);
-
-    // check if has more arguments than can take in
-    token = strtok(NULL, "/");
-    if(token != NULL){
-        printf("%s-- Error: too many args --%s\n", KMAG, KNRM);
-        return -ENOENT;
-    } else {
-        printf("%s-- getattr: valid number of args --%s\n", KMAG, KNRM);
-    }
-
-    // check if doc
-    if(strcmp(commands[0], "doc") == 0){
-        if(commands[1] != NULL) {
-            printf("%s-- Error: docs and too many args --%s\n", KMAG, KNRM);
-            return -ENOENT;
-        }
-        printf("%s-- valid doc has: %s --%s\n", KMAG, op->op_description, KNRM);
-        stbuf->st_mode = S_IFREG | 0444;
-        stbuf->st_nlink = 1;
-        stbuf->st_size = strlen(op->op_description);
-        return 0;
-    } 
-    
-
-    return ret;
-
+    return -ENOENT;
 }
 
 static int mathfs_readdir(const char *path, void *buf, fuse_fill_dir_t filler, off_t offset,
@@ -136,25 +166,30 @@ static int mathfs_readdir(const char *path, void *buf, fuse_fill_dir_t filler, o
     (void) offset;
     (void) fi;
 
-    if(strcmp(path, "/") == 0){
-        filler(buf, ".", NULL, 0);
-        filler(buf, "..", NULL, 0);
+    filler(buf, ".", NULL, 0);
+    filler(buf, "..", NULL, 0);
+
+    if (strcmp(path, "/") == 0){
+        printf("%s-- In readdir at ROOT --%s\n", KMAG, KNRM);
+        // filler(buf, ".", NULL, 0);
+        // filler(buf, "..", NULL, 0);
         int i;
-        for(i = 0; i <= OP_TABLE_SIZE; i++){
+        for(i = 0; i < OP_TABLE_SIZE; i++){
             char * op_name = op_table[i].name;
+            printf("%s-- adding: %s --%s\n", KMAG, op_name, KNRM);
             filler(buf, op_name, NULL, 0);
         }
-
-    } else if(is_valid_op(path+1)){
-        filler(buf, ".", NULL, 0);
-        filler(buf, "..", NULL, 0);
+    } 
+    else if(strlen(path) > 1 && get_op((char*)path+1) != NULL){
+        // filler(buf, ".", NULL, 0);
+        // filler(buf, "..", NULL, 0);
         filler(buf, "doc", NULL, 0);
-    } else {
-        return -ENOENT;
-    }
+    } 
+    // else {
+    //     return -ENOENT;
+    // }
 
     return 0;
-
 }       
 
 static int mathfs_open(const char *path, struct fuse_file_info *fi)
