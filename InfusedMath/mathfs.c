@@ -15,7 +15,7 @@
 
 struct operation {
     char * name;
-    void (*op)(char *, char *);
+    void (*op)();
     char * op_description;
     int num_args;
 };
