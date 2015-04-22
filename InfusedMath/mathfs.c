@@ -135,6 +135,24 @@ static int mathfs_readdir(const char *path, void *buf, fuse_fill_dir_t filler, o
     printf("%s-- In readdir, path: %s --%s\n", KMAG, path, KNRM);
     (void) offset;
     (void) fi;
+
+    if(strcmp(path, "/") == 0){
+        filler(buf, ".", NULL, 0);
+        filler(buf, "..", NULL, 0);
+        int i;
+        for(i = 0; i <= OP_TABLE_SIZE; i++){
+            char * op_name = op_table[i].name;
+            filler(buf, op_name, NULL, 0);
+        }
+
+    } else if(is_valid_op(path+1)){
+        filler(buf, ".", NULL, 0);
+        filler(buf, "..", NULL, 0);
+        filler(buf, "doc", NULL, 0);
+    } else {
+        return -ENOENT;
+    }
+
     return 0;
 
 }       
@@ -143,7 +161,6 @@ static int mathfs_open(const char *path, struct fuse_file_info *fi)
 {
     printf("%s-- In open, path: %s --%s\n", KMAG, path, KNRM);
     return 0;
-
 }
 
 static int mathfs_read(const char *path, char *buf, size_t size, off_t offset, struct fuse_file_info *fi)
@@ -151,7 +168,6 @@ static int mathfs_read(const char *path, char *buf, size_t size, off_t offset, s
     printf("%s-- In read, path: %s --%s\n", KMAG, path, KNRM);
     (void) fi;
     return 0;
-
 }
 
 static struct fuse_operations mathfs_oper = {
