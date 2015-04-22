@@ -22,7 +22,7 @@ struct operation {
 typedef struct operation operation;
 
 operation op_table[] = {
-    {"factor", &factor, "Computes the prime factors of a number.\nThe file factor/n contains the prime factors of n.", 1},
+    {"factor", factor, "Computes the prime factors of a number.\nThe file factor/n contains the prime factors of n.", 1},
     {"fib", fib, "Produce a fibonacci sequence.\nThe file fib/n contains the first n fibonacci numbers.", 2},
     {"add", add, "Adds two numbers.\nThe file add/a/b contains the sum of a plus b.", 2},
     {"sub", subtract, "Subtracts two numbers.\nThe file sub/a/b contains the difference a minus b.", 2},
@@ -34,8 +34,8 @@ operation op_table[] = {
 operation * is_valid_op(char * token){
     int i;
     for(i = 0; i <= OP_TABLE_SIZE; i++){
-        if(strcmp(token, op_table[i]->name) == 0) {
-            return op_table[i];
+        if(strcmp(token, op_table[i].name) == 0) {
+            return &op_table[i];
         }
     }
     return NULL;

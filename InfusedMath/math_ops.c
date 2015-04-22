@@ -91,7 +91,8 @@ int is_prime(int num){
 
 	int lim = sqrt(num)+1;
 
-	for(int i = 2; i <= lim; i++){
+	int i;
+	for(i = 2; i <= lim; i++){
 		if(num % i == 0){
 			return 0;
 		}
