@@ -171,8 +171,6 @@ static int mathfs_readdir(const char *path, void *buf, fuse_fill_dir_t filler, o
 
     if (strcmp(path, "/") == 0){
         printf("%s-- In readdir at ROOT --%s\n", KMAG, KNRM);
-        // filler(buf, ".", NULL, 0);
-        // filler(buf, "..", NULL, 0);
         int i;
         for(i = 0; i < OP_TABLE_SIZE; i++){
             char * op_name = op_table[i].name;
@@ -181,13 +179,8 @@ static int mathfs_readdir(const char *path, void *buf, fuse_fill_dir_t filler, o
         }
     } 
     else if(strlen(path) > 1 && get_op((char*)path+1) != NULL){
-        // filler(buf, ".", NULL, 0);
-        // filler(buf, "..", NULL, 0);
         filler(buf, "doc", NULL, 0);
     } 
-    // else {
-    //     return -ENOENT;
-    // }
 
     return 0;
 }       
@@ -195,13 +188,38 @@ static int mathfs_readdir(const char *path, void *buf, fuse_fill_dir_t filler, o
 static int mathfs_open(const char *path, struct fuse_file_info *fi)
 {
     printf("%s-- In open, path: %s --%s\n", KMAG, path, KNRM);
+
+    /* 
+     * Should only need to check for the flags b/c fuse calls getattr to verify is a 
+     * valid file before attempting to open
+     */
+    if ((fi->flags & 3) != O_RDONLY) {
+        return -EACCES;
+    }
+
     return 0;
 }
 
 static int mathfs_read(const char *path, char *buf, size_t size, off_t offset, struct fuse_file_info *fi)
 {
     printf("%s-- In read, path: %s --%s\n", KMAG, path, KNRM);
+
+    // size_t len;
     (void) fi;
+
+    // lookup file size
+
+    /* Comented out for testing - do not remove */
+    // len = strlen(hello_str);
+    // if (offset < len) {
+    //     if (offset + size > len)
+    //         size = len - offset;
+    //     memcpy(buf, hello_str + offset, size);
+    // } else
+    //     size = 0;
+
+    // return size;
+
     return 0;
 }
 
