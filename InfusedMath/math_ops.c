@@ -1,3 +1,12 @@
+	/********************
+	*  Mark Conley		*
+	* Michael Newman	*
+	* Pavan Purohit		*
+	*					*
+	* Operating System	*
+	* Assignment 7		*
+	*********************/
+
 #include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -19,7 +28,8 @@ int isPrime(int n);
 //A function to print all prime factors of a given number n
 char * factor(char * f){
 	double test = atof(f);
-	char * str = (char *)malloc(MAX_SIZE); 
+	char * str = (char *)malloc(MAX_SIZE);
+	if(!str) return NULL;
 
 	//check if positive number
 	if(test < 0){
@@ -70,6 +80,7 @@ char * fib(char * n) {
 	}
 
 	char * str = (char *)malloc(MAX_SIZE);  
+	if(!str) return NULL;
 
 	for ( c = 1 ; c < lim+1 ; c++ ){
 		if ( c <= 1 ){
@@ -90,6 +101,7 @@ char * add(char *a, char *b){
 	double x = atof(a);
 	double y = atof(b);
 	char * f = (char *)malloc(MAX_SIZE); 
+	if(!f) return NULL;
 
 	sprintf(f, "%g\n", (x+y));
 	return f;
@@ -100,6 +112,7 @@ char * subtract(char *a, char *b){
 	double x = atof(a);
 	double y = atof(b);
 	char * f = (char *)malloc(MAX_SIZE); 
+	if(!f) return NULL;
 
 	sprintf(f, "%g\n", (x - y));
 	return f;
@@ -110,6 +123,7 @@ char * multiply(char *a, char *b){
 	double x = atof(a);
 	double y = atof(b);
 	char * f = (char *)malloc(MAX_SIZE); 
+	if(!f) return NULL;
 
 	sprintf(f, "%g\n", (x * y));
 	return f;
@@ -120,6 +134,7 @@ char * divide(char *a, char *b){
 	double x = atof(a);
 	double y = atof(b);
 	char * f = (char *)malloc(MAX_SIZE); 
+	if(!f) return NULL;
 
 	if(y == 0){
 		printf("Cannot divide by 0.\n");
@@ -135,6 +150,7 @@ char * exponent(char *a, char *b){
 	double x = atof(a);
 	double y = atof(b);
 	char * str = (char *)malloc(MAX_SIZE); 
+	if(!str) return NULL;
 
 	sprintf(str, "%g\n", pow(x,y));
 
