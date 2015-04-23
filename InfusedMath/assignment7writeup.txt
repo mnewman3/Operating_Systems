@@ -1,0 +1,11 @@
+Mark Conley
+Michael Newman
+Pavan Purohit
+Operating Systems
+Assignment 7
+
+For assignment 7 our group used FUSE to implement a virtual file system. FUSE is an OS kernel module that is mounted under VFS and passes requests back up to a user process. This enabls us to implement the functionality required to create a file system entirely in userspace, this allows us to not need kernel level programming.
+
+Our file system will perform mathematical operations based on names and numbers passed to it. Also, our VFS was specialized in that it was read only. So we do not actually store files in our implementations. The root of our file sytem contained 7 directories: factor, fib, add, sub, mul, exp, div. These directories represent the mathematical operations that their names are short for. When called with the system command 'cat' and correct arguments the operation's result is returned. 
+
+To do this we had to also implement the getattr(), readdir(), open(), read(). getattr gets the attributes and a file or folder and also checks the validity of a file or folder. readdir() gets the contents of a directory. open() just checks for certain permissions and returns success or an error. read() reads the file size in bytes.

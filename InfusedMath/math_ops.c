@@ -47,6 +47,7 @@ char * factor(char * f){
 	int n = (int)test;
     // Print the number of 2s that divide n
 	while (n%2 == 0){
+		printf("%d\n", 2);
 		sprintf(str, "%d\n", 2);
 		n = n/2;
 	}
@@ -56,6 +57,8 @@ char * factor(char * f){
 	// While i divides n, print i and divide n
 		while (n%i == 0){
 			sprintf(str, "%d\n", i);
+					printf("%d\n", i);
+
 			n = n/i;
 		}	
 	}
@@ -63,7 +66,9 @@ char * factor(char * f){
 	// This condition is to handle the case whien n is a prime number
 	// greater than 2
 	if (n > 2)
-	sprintf(str, "%d\n", n);
+		sprintf(str, "%d\n", n);
+			printf("%d\n", n);
+
 
 	return str;
 }
@@ -174,4 +179,9 @@ int is_prime(int num){
 		}
 	}
 	return 1;
+}
+
+int main(void){
+	printf("result is: %s\n",factor("100"));
+	return 0;
 }
